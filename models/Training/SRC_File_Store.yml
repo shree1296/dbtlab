@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: test_prod
     database: DBT_DB
-    schema: PROD
+    schema: STG_SCH
     tables:
       - name: Store_2023
       - name: Store_Sales_2023
