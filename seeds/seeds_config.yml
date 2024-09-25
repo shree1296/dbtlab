@@ -1,0 +1,12 @@
+seeds:
+  - name: zip_codes
+    config:
+      column_types:
+        zipcode: varchar
+        name: varchar
+  - name: psvfile
+    config:
+      delimiter: "|"
+      column_types:
+        id: number
+        name: varchar
