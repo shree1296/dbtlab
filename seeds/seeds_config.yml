@@ -10,3 +10,13 @@ seeds:
       column_types:
         id: number
         name: varchar
+  - name: Countrydialcode
+    config:
+      column_types:
+        COUNTRY: varchar(30)
+        COUNTRY_CODE: Number
+        dialcode:
+          countrycode2:
+            column_types:
+              COUNTRY: varchar(30)
+              COUNTRY_CODE: Number
