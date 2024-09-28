@@ -1,0 +1,11 @@
+
+version: 2
+
+models:
+    - name: stg_product
+      description: "this will store product information"
+      columns:
+          - name: quantity
+            description: "This will have product quantity"
+            tests:
+                - quantity_greater_than_10

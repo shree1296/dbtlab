@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: stg_product2
+    description: "This will store product information"
+    columns:
+      - name: region
+        description: "The primary key for this table"
+        tests:
+          - not_null:
+              config:
+                severity: error
+                error_if: ">2"
+                warn_if: ">1"
+                store_failures: true
