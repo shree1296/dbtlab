@@ -21,9 +21,13 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Install dbt
+      - name: Upgrade pip & Install dbt
         run: |
-          pip install dbt-core dbt-snowflake  # Change dbt-snowflake to your adapter (dbt-bigquery, dbt-postgres, etc.)
+          python -m pip install --upgrade pip setuptools
+          pip install dbt-core  # Only dbt-core, no adapters
+
+      - name: Verify dbt installation
+        run: dbt --version
 
       - name: Install dbt dependencies
         run: dbt deps
