@@ -1,0 +1,61 @@
+version: 2
+
+sources:
+  - name: raw
+    database: CLASSICMODELS  # Replace with your actual database name
+    schema: RAW
+    tables:
+      - name: SRC_CUSTOMERS
+        description: "Source view for customers"
+        meta:
+          type: view
+
+      - name: SRC_STATES
+        description: "Source view for states"
+        meta:
+          type: view
+
+      - name: SRC_COUNTRIES
+        description: "Source view for countries"
+        meta:
+          type: view
+
+      - name: SRC_CITIES
+        description: "Source view for cities"
+        meta:
+          type: view
+
+      - name: SRC_PRODUCTS
+        description: "Source view for products"
+        meta:
+          type: view
+
+      - name: SRC_PRODUCTLINES
+        description: "Source view for product lines"
+        meta:
+          type: view
+
+      - name: SRC_PAYMENTS
+        description: "Source view for payments"
+        meta:
+          type: view
+
+      - name: SRC_ORDERS
+        description: "Source view for orders"
+        meta:
+          type: view
+
+      - name: SRC_ORDER_DETAILS
+        description: "Source view for order details"
+        meta:
+          type: view
+
+      - name: SRC_OFFICE
+        description: "Source view for office locations"
+        meta:
+          type: view
+
+      - name: SRC_EMPLOYEES
+        description: "Source view for employees"
+        meta:
+          type: view

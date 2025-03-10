@@ -1,0 +1,5 @@
+SELECT P.SUPPLIER_NAME
+FROM raw_curated.dim_products P
+LEFT JOIN raw_curated.dim_suppliers S
+    ON P.SUPPLIER_NAME = S.SUPPLIER_NAME
+WHERE S.SUPPLIER_NAME IS NULL

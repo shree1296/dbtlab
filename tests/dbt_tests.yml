@@ -1,0 +1,77 @@
+version: 2
+
+models:
+  - name: fact_orders
+    description: "Fact table for orders containing customer references"
+    columns:
+      - name: CUSTOMER_KEY
+        description: "Foreign key reference to dim_customers"
+        tests:
+          - relationships:
+              to: ref('dim_customers')
+              field: CUSTOMER_KEY
+
+      - name: ORDER_DATE_ID
+        description: "Foreign key reference to dim_dates"
+        tests:
+          - relationships:
+              to: ref('dim_dates')
+              field: DATE_ID
+
+  - name: dim_customers
+    description: "Dimension table for customers"
+    columns:
+      - name: CUSTOMER_KEY
+        description: "Primary key for dim_customers"
+        tests:
+          - unique
+          - not_null
+
+      - name: CUSTOMER_ID
+        description: "Alternate key for customers"
+        tests:
+          - not_null
+
+      - name: CUSTOMER_CREDIT_LIMIT
+        description: "Credit limit of the customer"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+          - dbt_utils.not_constant
+
+  - name: dim_suppliers
+    description: "Dimension table for suppliers"
+    columns:
+      - name: SUPPLIER_KEY
+        description: "Primary key for suppliers"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_products
+    columns:
+    - name: SUPPLIER_NAME  # Ensure correct column
+      description: "Foreign key reference to dim_suppliers"
+      tests:
+        - relationships:
+            to: ref('dim_suppliers')
+            field: SUPPLIER_NAME  # Must match the actual column in dim_suppliers
+
+
+  - name: dim_dates
+    description: "Dimension table for dates"
+    columns:
+      - name: DATE_ID
+        description: "Primary key for dim_dates"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_offices
+    description: "Dimension table for offices"
+    columns:
+      - name: OFFICE_ID
+        description: "Primary key for dim_offices"
+        tests:
+          - unique
+          - not_null

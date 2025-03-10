@@ -1,0 +1,7 @@
+
+SELECT
+    ID AS CITY_ID, 
+    NAME AS CITY_NAME,
+    STATE_CODE,
+    COUNTRY_CODE
+FROM raw.cities

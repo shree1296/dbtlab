@@ -1,0 +1,12 @@
+WITH recent_orders AS (
+    SELECT 
+        ORDER_NUMBER, 
+        TO_DATE(CAST(ORDER_DATE_ID AS STRING), 'YYYYMMDD') AS ORDER_DATE
+    FROM raw_curated.fact_orders
+    WHERE TO_DATE(CAST(ORDER_DATE_ID AS STRING), 'YYYYMMDD') < DATEADD(YEAR, -2, CURRENT_DATE)
+)
+SELECT 
+    COUNT(*) AS outdated_orders,
+    LISTAGG(ORDER_NUMBER, ', ') WITHIN GROUP (ORDER BY ORDER_NUMBER) AS failing_orders
+FROM recent_orders
+HAVING COUNT(*) > 0

@@ -1,0 +1,6 @@
+
+SELECT
+    STATE_CODE,
+    NAME AS STATE_NAME,
+    COUNTRY_CODE
+FROM raw.states
