@@ -1,46 +1,44 @@
-name: dbt CI/CD  # Name of the workflow
+name: dbt CI/CD Pipeline
 
 on:
-  push:  # Trigger workflow on every push to the main branch
+  push:
     branches:
       - main
-  pull_request:  # Also trigger on pull requests to main
+  pull_request:
     branches:
       - main
 
 jobs:
-  dbt-build-test:  # Job to run dbt tests and deployment
-    runs-on: ubuntu-latest  # Use latest Ubuntu runner
+  dbt_run:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo  # Step 1: Clone the repo
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Python  # Step 2: Install Python for dbt
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: "3.9"
 
-      - name: Install dbt and dependencies  # Step 3: Install dbt for Snowflake
+      - name: Install dbt
         run: |
-          python -m venv dbt_env  # Create a virtual environment
-          source dbt_env/bin/activate  # Activate virtual environment
-          pip install dbt-core dbt-snowflake  # Install dbt & Snowflake adapter
+          pip install dbt-core dbt-snowflake  # Change dbt-snowflake to your adapter (dbt-bigquery, dbt-postgres, etc.)
 
-      - name: Set up dbt profile  # Step 4: Create dbt profiles.yml from secrets
-        run: |
-          mkdir -p ~/.dbt  # Ensure the .dbt directory exists
-          echo "${{ secrets.DBT_PROFILES_YML }}" > ~/.dbt/profiles.yml  # Add credentials
-
-      - name: Run dbt deps  # Step 5: Install dbt packages
+      - name: Install dbt dependencies
         run: dbt deps
 
-      - name: Run dbt compile  # Step 6: Compile dbt models (checks for syntax errors)
-        run: dbt compile
+      - name: Run dbt models
+        run: dbt run
 
-      - name: Run dbt tests  # Step 7: Run dbt tests (validates data quality)
+      - name: Run dbt tests
         run: dbt test
 
-      - name: Deploy dbt models (only on main branch)  # Step 8: Deploy models if on main branch
-        if: github.ref == 'refs/heads/main'
-        run: dbt run
+      - name: Generate dbt documentation
+        run: dbt docs generate
+
+      - name: Upload dbt artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-artifacts
+          path: target/
