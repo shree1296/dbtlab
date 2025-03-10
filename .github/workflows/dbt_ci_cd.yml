@@ -1,0 +1,46 @@
+name: dbt CI/CD  # Name of the workflow
+
+on:
+  push:  # Trigger workflow on every push to the main branch
+    branches:
+      - main
+  pull_request:  # Also trigger on pull requests to main
+    branches:
+      - main
+
+jobs:
+  dbt-build-test:  # Job to run dbt tests and deployment
+    runs-on: ubuntu-latest  # Use latest Ubuntu runner
+
+    steps:
+      - name: Checkout repo  # Step 1: Clone the repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python  # Step 2: Install Python for dbt
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dbt and dependencies  # Step 3: Install dbt for Snowflake
+        run: |
+          python -m venv dbt_env  # Create a virtual environment
+          source dbt_env/bin/activate  # Activate virtual environment
+          pip install dbt-core dbt-snowflake  # Install dbt & Snowflake adapter
+
+      - name: Set up dbt profile  # Step 4: Create dbt profiles.yml from secrets
+        run: |
+          mkdir -p ~/.dbt  # Ensure the .dbt directory exists
+          echo "${{ secrets.DBT_PROFILES_YML }}" > ~/.dbt/profiles.yml  # Add credentials
+
+      - name: Run dbt deps  # Step 5: Install dbt packages
+        run: dbt deps
+
+      - name: Run dbt compile  # Step 6: Compile dbt models (checks for syntax errors)
+        run: dbt compile
+
+      - name: Run dbt tests  # Step 7: Run dbt tests (validates data quality)
+        run: dbt test
+
+      - name: Deploy dbt models (only on main branch)  # Step 8: Deploy models if on main branch
+        if: github.ref == 'refs/heads/main'
+        run: dbt run
