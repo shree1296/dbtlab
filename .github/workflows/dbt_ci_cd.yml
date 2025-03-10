@@ -21,25 +21,27 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Upgrade pip & Install dbt
+      - name: Install dbt-core
         run: |
           python -m pip install --upgrade pip setuptools
-          pip install dbt-core  # Only dbt-core, no adapters
+          pip install --user dbt-core  # Install in user space
 
       - name: Verify dbt installation
-        run: dbt --version
+        run: |
+          echo "Checking dbt version..."
+          ~/.local/bin/dbt --version
 
       - name: Install dbt dependencies
-        run: dbt deps
+        run: ~/.local/bin/dbt deps  # Use full path to dbt
 
       - name: Run dbt models
-        run: dbt run
+        run: ~/.local/bin/dbt run
 
       - name: Run dbt tests
-        run: dbt test
+        run: ~/.local/bin/dbt test
 
       - name: Generate dbt documentation
-        run: dbt docs generate
+        run: ~/.local/bin/dbt docs generate
 
       - name: Upload dbt artifacts
         uses: actions/upload-artifact@v4
