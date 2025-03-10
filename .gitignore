@@ -1,3 +1,7 @@
 target/
 dbt_packages/
 logs/
+"target/" 
+"dbt_packages/" 
+"logs/" 
+"profiles.yml"   # Avoid committing credentials
