@@ -13,51 +13,55 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
+      # Step 1: Checkout the code from the repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up Python
+      # Step 2: Set up Python environment for dbt
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
 
-      # Step 3: Install dbt-core
+      # Step 3: Install dbt-core and required dependencies
       - name: Install dbt-core
         run: |
           python -m pip install --upgrade pip setuptools
-          pip install --user dbt-core dbt-snowflake
+          pip install --user dbt-core dbt-snowflake  # Install dbt for Snowflake
 
-      # Step 4: Set up dbt profiles.yml (from GitHub Secrets)
+      # Step 4: Create the dbt profiles.yml file from GitHub Secrets
       - name: Set up dbt profiles.yml
         run: |
-          mkdir -p ~/.dbt  # Ensure the .dbt directory exists
-          echo "${{ secrets.DBT_PROFILES_YML }}" > ~/.dbt/profiles.yml
+          mkdir -p ~/.dbt
+          echo "$DBT_PROFILES_YML" > ~/.dbt/profiles.yml
+        env:
+          DBT_PROFILES_YML: ${{ secrets.DBT_PROFILES_YML }}
 
-      # Step 5: Verify dbt installation
+      # Step 5: Debugging - Print profiles.yml to check content
+      - name: Debug profiles.yml
+        run: cat ~/.dbt/profiles.yml
+
+      # Step 6: Verify dbt installation
       - name: Verify dbt installation
-        run: |
-          echo "Checking dbt version..."
-          ~/.local/bin/dbt --version
+        run: dbt --version
 
-      # Step 6: Install dbt dependencies
+      # Step 7: Install dbt dependencies
       - name: Install dbt dependencies
-        run: ~/.local/bin/dbt deps
+        run: dbt deps
 
-      # Step 7: Run dbt models
+      # Step 8: Run dbt models
       - name: Run dbt models
-        run: ~/.local/bin/dbt run
+        run: dbt run
 
-      # Step 8: Run dbt tests
+      # Step 9: Run dbt tests
       - name: Run dbt tests
-        run: ~/.local/bin/dbt test
+        run: dbt test
 
-      # Step 9: Generate dbt documentation
+      # Step 10: Generate dbt documentation
       - name: Generate dbt documentation
-        run: ~/.local/bin/dbt docs generate
+        run: dbt docs generate
 
-      # Step 10: Upload dbt artifacts
+      # Step 11: Upload dbt artifacts for review
       - name: Upload dbt artifacts
         uses: actions/upload-artifact@v4
         with:
