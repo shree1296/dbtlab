@@ -1,0 +1,13 @@
+dwh_project:
+  outputs:
+    dev:
+      account: qkluqag-to07768
+      database: classicmodels
+      password: Srikanth1296!?!
+      role: accountadmin
+      schema: raw
+      threads: 2
+      type: snowflake
+      user: shree
+      warehouse: compute_wh
+  target: dev
