@@ -33,7 +33,7 @@ jobs:
       - name: Set up dbt profiles.yml
         run: |
           mkdir -p ~/.dbt  # Ensure the .dbt directory exists
-          echo "${{ secrets.DBT_PROFILES }}" > ~/.dbt/profiles.yml
+          echo "${{ secrets.DBT_PROFILES_YML }}" > ~/.dbt/profiles.yml
 
       # Step 5: Verify dbt installation
       - name: Verify dbt installation
